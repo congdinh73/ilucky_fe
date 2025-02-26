@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/alt-text */
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PopupOTP from "../images/svgPopup/PopupCancel.svg";
 import IconX from "../images/svgPopup/IconX.svg";
 
@@ -10,22 +8,49 @@ import { callApi, mainUrl } from "../util/api/requestUtils";
 import { useTranslation } from "react-i18next";
 import gui from "../util/gui";
 
-const PopupBuyTurn = ({ onClose, onSuccess}) => {
+const PopupBuyTurn = ({ onClose, onSuccess }) => {
   const { t } = useTranslation();
   const [disabled, setDisabled] = useState(false);
+  const [message, setMessage] = useState(""); // Thêm state để hiển thị thông báo
 
   const onSubmit = async () => {
-    // onClose();
     setDisabled(true);
+    setMessage(""); // Reset message before API call
+  
     try {
-      const url = mainUrl + "/api/mps/charge";
-      const res = await callApi(url, "POST", {});
-      console.log("res", res);
-      if (res) {
-        onSuccess(res);
+      const url = mainUrl + `/api/lucky/buy_turns?turns=5&costPerTurn=1000&currencyType=VND`;
+      const token = localStorage.getItem("token");
+  
+      const options = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+  
+      const res = await fetch(url, options);
+  
+      let data;
+      try {
+        data = await res.json();
+      } catch (jsonError) {
+        throw new Error("Invalid JSON response or empty response.");
+      }
+  
+      console.log("res", data);
+  
+      if (res.ok) {
+        const newTurnCount = data?.message?.match(/\d+/)?.[0] || "unknown"; 
+        onSuccess(newTurnCount); // Pass updated turn count
+        setMessage(t(`Mua lượt quay thành công! Bạn còn ${newTurnCount} lượt.`));
+      } else {
+        setMessage(data?.message || t("Lỗi khi mua lượt quay."));
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("Error:", error);
+      setMessage(t("Lỗi hệ thống. Vui lòng thử lại."));
+    } finally {
+      setDisabled(false);
     }
   };
 
@@ -52,7 +77,8 @@ const PopupBuyTurn = ({ onClose, onSuccess}) => {
           >
             <img className="" src={IconX} />
           </div>
-          <div className="title-popup"
+          <div
+            className="title-popup"
             style={{
               position: "absolute",
               left: 120,
@@ -60,7 +86,7 @@ const PopupBuyTurn = ({ onClose, onSuccess}) => {
               color: "#4C2626",
               fontSize: 14,
               width: "100px",
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             Gura
@@ -94,6 +120,21 @@ const PopupBuyTurn = ({ onClose, onSuccess}) => {
             <div style={{ fontSize: 12, marginTop: 6 }}>
               {t("5000 VND/5 turns/day")}
             </div>
+
+            {/* Hiển thị thông báo lỗi nếu có */}
+            {message && (
+              <div
+                style={{
+                  color: "red",
+                  fontSize: 12,
+                  marginTop: 6,
+                  textAlign: "center",
+                }}
+              >
+                {message}
+              </div>
+            )}
+
             <button
               style={{ marginTop: 8 }}
               onClick={onSubmit}

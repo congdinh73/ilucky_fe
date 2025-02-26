@@ -1,0 +1,105 @@
+/* Leaderboard Modal */
+.leaderboard-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -85%);
+    width: 90%;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(100px);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    color: black;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    z-index: 9999;
+}
+
+/* Leaderboard Header */
+.leaderboard-header-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid white;
+}
+
+/* Style for header items */
+.header-rank, .header-username, .header-score, .header-star {
+    flex: 1;
+    text-align: center;
+}
+
+/* List Container */
+.leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Leaderboard Items */
+.leaderboard-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+/* Spacing for Columns */
+.rank, .username, .score, .star {
+    flex: 1;
+    text-align: center;
+}
+
+/* Star Styling */
+.star {
+    color: gold;
+    font-weight: bold;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+    .leaderboard-header-row, .leaderboard-item {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Hover and Active Effects */
+.close-button:hover {
+    color: #ff4d4d; /* Red color on hover */
+    transform: scale(1.2); /* Slight zoom effect */
+}
+
+.close-button:active {
+    transform: scale(0.9); /* Click animation */
+}
+
+/* Adjust for Mobile */
+@media (max-width: 480px) {
+    .close-button {
+        font-size: 18px;
+        top: 8px;
+        right: 10px;
+    }
+}
