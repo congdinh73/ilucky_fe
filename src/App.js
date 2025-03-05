@@ -207,7 +207,6 @@ const App = () => {
     const [showHistory, setShowHistory] = useState(false);
     const [showHuongDan, setShowHuongDan] = useState(false);
     const [countPlayTurn, setCountPlayTurn] = useState(0);
-
     const [buyMore, setBuyMore] = useState(false);
     const [messageError, setMessageError] = useState("");
     const [showLeaderboard, setShowLeaderboard] = useState(false);
